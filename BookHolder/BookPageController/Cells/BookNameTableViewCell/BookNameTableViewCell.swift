@@ -19,16 +19,16 @@ class BookNameTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-    ///Тут была проблема в том, что сервер шлет ошибку когда пытаюсь достучаться до рейтинга, если беру оттуда title или type к примеру, то все работает(возможно что-то не учел)
+   
     func set(book: BookModel, rating: Double?) {
         bookNameLabel.text = book.title
         yearLabel.text = "," + String(book.datePublish)
         authorNameLabel.text = book.authors.first?.name
         if let rating = rating {
             ratingLabel.text = "\(rating)"
+        } else {
+            ratingLabel.text = "failed to parse"
         }
-        ratingLabel.text = "failed to parse"
-        
         
     }
 

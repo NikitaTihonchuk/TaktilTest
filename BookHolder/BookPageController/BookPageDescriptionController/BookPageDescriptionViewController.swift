@@ -36,9 +36,10 @@ class BookPageDescriptionViewController: UIViewController {
         spinner.show(in: view)
         self.title = book?.info.title
         registerCell()
+        getRating(model: book?.info)
         getDescription(model: book?.info)
-        tableView.dataSource = self
         spinner.dismiss(animated: true)
+        tableView.dataSource = self
     }
   
     ///functions
@@ -64,6 +65,16 @@ class BookPageDescriptionViewController: UIViewController {
 
     }
     
+    private func getRating(model: BookModel?) {
+        guard let model = model else { return }
+        APIProvider().getRating(bookName: model.title) { [weak self] rating in
+            guard let strongSelf = self else { return }
+            strongSelf.rating = rating
+        } error: { error in
+            print(error)
+        }
+    }
+    
 
 }
 //MARK: Extensions
@@ -87,12 +98,6 @@ extension BookPageDescriptionViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: BookNameTableViewCell.id, for: indexPath)
             guard let nameCell = cell as? BookNameTableViewCell,
                   let book = book else { return cell }
-            APIProvider().getRating(bookName: book.info.title) { [weak self] rating in
-                guard let strongSelf = self else { return }
-                strongSelf.rating = rating
-            } error: { error in
-                print(error)
-            }
             nameCell.set(book: book.info, rating: rating)
             return nameCell
         case .description:

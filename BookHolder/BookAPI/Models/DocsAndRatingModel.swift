@@ -11,24 +11,16 @@ struct DocsModel: Decodable {
     var docs: [RatingModel]
     
     enum CodingKeys: String, CodingKey {
-        case docs
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.docs = try container.decode([RatingModel].self, forKey: .docs)
+        case docs = "docs"
     }
 }
 
 struct RatingModel: Decodable {
-    var rating: Double
+    var rating: Double?
     
     enum CodingKeys: String, CodingKey {
           case rating = "ratings_average"
     }
     
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.rating = try container.decode(Double.self, forKey: .rating)
-    }
+
 }
